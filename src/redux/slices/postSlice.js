@@ -4,6 +4,7 @@ const postSlice = createSlice({
     name:"post",
     initialState:{
         posts:[],
+        currentPosts:[],
         loading:false
     },
     reducers:{
@@ -12,16 +13,22 @@ const postSlice = createSlice({
         },
         getPost(){},
         setPost(state,action){
-            const {posts} = action.payload
-            return {...state,posts,loading:false}
+            const {posts} = action.payload;
+            return {...state,posts,currentPosts:posts.slice(0,5),loading:false}
         },
+        getFilteredPosts(state,action){
+            const {pageNum} = action.payload;
+            const currentPosts = state.posts.slice((pageNum-1)*5,pageNum*5);
+            return {...state,currentPosts:currentPosts}
+        },
+        
         clearPost(state){
-            return{posts:[],loading:false}
+            return{posts:[],currentPosts:[],loading:false}
         }
     }
 });
 
-export const {getPost, setPost, clearPost,setLoadingPost} = postSlice.actions;
+export const {getPost, setPost, getFilteredPosts, clearPost,setLoadingPost} = postSlice.actions;
 export default postSlice.reducer;
 
 

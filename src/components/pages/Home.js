@@ -8,7 +8,7 @@ const NavbarContainer = styled.div`
 height:10vh;
 width:100%;
 background-color:#3f75d9;
-padding:5px;
+/* padding:5px; */
 text-align:center;
 font-weight:600;
 display: flex;
@@ -17,7 +17,7 @@ justify-content: center;
 `;
 const Container = styled.div`
 background-color:#b4c8ed;
-height: 85vh;
+height: 90vh;
 `;
 const Wrapper = styled.div`
 /* padding: 10px; */
