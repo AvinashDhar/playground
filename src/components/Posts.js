@@ -1,108 +1,111 @@
 import styled from "styled-components";
 import CircularProgress from "@mui/material/CircularProgress";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import {
-  faCircleMinus,
-  faMinus,
-  faPlusCircle,
-  faPlusMinus,
-} from "@fortawesome/free-solid-svg-icons";
+import { faCircleMinus, faPlusCircle } from "@fortawesome/free-solid-svg-icons";
 
 import { useDispatch, useSelector } from "react-redux";
-import {
-  getPost,
-  getFilteredPosts,
-  clearPost,
-} from "../redux/slices/postSlice";
+import { getPost } from "../redux/slices/postSlice";
 import Button from "./Button/Button";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import PostItem from "./PostItem";
 
 const ProductContainer = styled.div``;
 const ControllerContainer = styled.div`
   display: flex;
   justify-content: space-between;
+  position: fixed;
+    top: 6vh;
+    width: 100%;
+    background: #fff;
 `;
 const Pagination = styled.div`
   display: flex;
   justify-content: space-between;
 `;
+const Product = styled.div`
+margin-top: 50px;
+`;
+
 
 function Posts() {
-  const [postCountStart, setPostCountStart] = useState(100);
   const [pageNum, setPageNum] = useState(1);
+  const [totalNumOfPages, setTotalNumOfPages] = useState(1);
 
   const dispatch = useDispatch();
-  const { posts, currentPosts, loading } = useSelector((state) => state.post);
+  const { filteredPosts, loading } = useSelector((state) => state.post);
+  const [poststoShow, setPoststoShow] = useState([]);
 
-  const handleLoadingPosts = (postCountStart) => {
-    dispatch(getPost({ postCountStart }));
+  useEffect(() => {
+    setPoststoShow(filteredPosts.slice(0, 5));
+    setPageNum(1);
+    setTotalNumOfPages(Math.ceil(filteredPosts.length / 5));
+  }, [filteredPosts]);
+
+  useEffect(() => {
+    handleLoadingPosts();
+  }, []);
+
+  const handleLoadingPosts = () => {
+    dispatch(getPost());
   };
   const showLoading = () => {
     return (
       loading && (
-        <CircularProgress style={{ color: "#1c5dd5" }} color="secondary" />
+        <CircularProgress
+          style={{ color: "#1c5dd5", fontSize: 12 }}
+          color="secondary"
+        />
       )
     );
   };
   const incrementHandler = () => {
-    if (pageNum == 4) return;
-    dispatch(getFilteredPosts({ pageNum: pageNum + 1 }));
+    if (pageNum == totalNumOfPages) return;
+    let updatedcurrentPosts = filteredPosts.slice(
+      (pageNum + 1 - 1) * 5,
+      (pageNum + 1) * 5
+    );
+    setPoststoShow(updatedcurrentPosts);
     setPageNum((prev) => prev + 1);
   };
   const decrementHandler = () => {
     if (pageNum == 1) return;
-    dispatch(getFilteredPosts({ pageNum: pageNum - 1 }));
+    let updatedcurrentPosts = filteredPosts.slice(
+      (pageNum - 1 - 1) * 5,
+      (pageNum - 1) * 5
+    );
+    setPoststoShow(updatedcurrentPosts);
     setPageNum((prev) => prev - 1);
   };
-
   return (
     <div>
-      Products
       <ProductContainer>
-        <hr></hr>
         <ControllerContainer>
-          <Button onClick={() => handleLoadingPosts(postCountStart)}>
-            Load products
-          </Button>
-          {currentPosts == undefined || currentPosts.length == 0 ? null:(<Pagination>
-            <Button
-              disabled={currentPosts == undefined || currentPosts.length == 0}
-              onClick={decrementHandler}
-            >
-              <FontAwesomeIcon icon={faCircleMinus} />
-            </Button>
-            {" " + "Page: " + pageNum + " "}
-            <Button
-              disabled={currentPosts == undefined || currentPosts.length == 0}
-              onClick={incrementHandler}
-            >
-              <FontAwesomeIcon icon={faPlusCircle} />
-            </Button>
-          </Pagination>)}
-          
-          <Button
-            onClick={() => {
-              dispatch(clearPost());
-              setPageNum(1);
-            }}
-          >
-            Clear products
-          </Button>
+          {poststoShow == undefined || poststoShow.length == 0 ? null : (
+            <Pagination>
+              <Button
+                style={{borderRadius:"5px"}}
+                disabled={poststoShow == undefined || poststoShow.length == 0}
+                onClick={decrementHandler}
+              >
+                <FontAwesomeIcon icon={faCircleMinus} />
+              </Button>
+              {" " + "Page: " + pageNum + " "}
+              <Button
+                style={{borderRadius:"5px"}}
+                disabled={poststoShow == undefined || poststoShow.length == 0}
+                onClick={incrementHandler}
+              >
+                <FontAwesomeIcon icon={faPlusCircle} />
+              </Button>
+            </Pagination>
+          )}
         </ControllerContainer>
-
-        <br />
-        <br />
-        <br />
-        <br />
         {showLoading()}
-        <div>
-          {currentPosts?.map((item) => {
-            return (
-                <PostItem key={item.id} item={item}/>
-            );
+        <Product>
+          {poststoShow?.map((item) => {
+            return <PostItem key={item.id} item={item} />;
           })}
-        </div>
+        </Product>
       </ProductContainer>
     </div>
   );

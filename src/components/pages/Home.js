@@ -5,10 +5,10 @@ import ProfileEdit from '../ProfileEdit';
 import Todos from '../Todos';
 import styled from 'styled-components';
 const NavbarContainer = styled.div`
-height:10vh;
+height:5vh;
 width:100%;
-background-color:#3f75d9;
-/* padding:5px; */
+background-color: #000;
+color: #fff;
 text-align:center;
 font-weight:600;
 display: flex;
@@ -17,7 +17,7 @@ justify-content: center;
 `;
 const Container = styled.div`
 background-color:#b4c8ed;
-height: 90vh;
+height: 95vh;
 `;
 const Wrapper = styled.div`
 /* padding: 10px; */
@@ -31,15 +31,17 @@ display: flex;
 flex-direction: column;
 justify-content: center;
 align-items: center;
+background-color: #fff;
 `;
 const PostContainer = styled.div`
 border-left: 1px solid #ddd;
 border-right: 1px solid #ddd;
+background-color: #fff;
 padding: 0 5px;
-flex: 2;
+flex: 3;
 height: 100%;
-overflow-y: auto;
-  &::-webkit-scrollbar {
+overflow-y: scroll;
+&::-webkit-scrollbar {
         width:3px;
     }
 `;

@@ -21,7 +21,7 @@ function Nav() {
   const user = useSelector((state) => state.user.name);
   return (
     <Container>
-      <h4>MY PRACTICE GROUND</h4>
+      <h4>Shopper Stop</h4>
       {user ? (
         <ProfileContainer>
           <ProfileImage src="default.jpg" />
