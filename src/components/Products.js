@@ -4,10 +4,10 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCircleMinus, faPlusCircle } from "@fortawesome/free-solid-svg-icons";
 
 import { useDispatch, useSelector } from "react-redux";
-import { getPost } from "../redux/slices/postSlice";
+import { getProduct } from "../redux/slices/productSlice";
 import Button from "./Button/Button";
 import { useState, useEffect } from "react";
-import PostItem from "./PostItem";
+import ProductItem from "./ProductItem";
 
 const ProductContainer = styled.div``;
 const ControllerContainer = styled.div`
@@ -27,26 +27,26 @@ margin-top: 50px;
 `;
 
 
-function Posts() {
+function Products() {
   const [pageNum, setPageNum] = useState(1);
   const [totalNumOfPages, setTotalNumOfPages] = useState(1);
 
   const dispatch = useDispatch();
-  const { filteredPosts, loading } = useSelector((state) => state.post);
-  const [poststoShow, setPoststoShow] = useState([]);
+  const { filteredProducts, loading } = useSelector((state) => state.product);
+  const [productstoShow, setProductstoShow] = useState([]);
 
   useEffect(() => {
-    setPoststoShow(filteredPosts.slice(0, 5));
+    setProductstoShow(filteredProducts.slice(0, 5));
     setPageNum(1);
-    setTotalNumOfPages(Math.ceil(filteredPosts.length / 5));
-  }, [filteredPosts]);
+    setTotalNumOfPages(Math.ceil(filteredProducts.length / 5));
+  }, [filteredProducts]);
 
   useEffect(() => {
-    handleLoadingPosts();
+    handleLoadingProducts();
   }, []);
 
-  const handleLoadingPosts = () => {
-    dispatch(getPost());
+  const handleLoadingProducts = () => {
+    dispatch(getProduct());
   };
   const showLoading = () => {
     return (
@@ -60,31 +60,31 @@ function Posts() {
   };
   const incrementHandler = () => {
     if (pageNum == totalNumOfPages) return;
-    let updatedcurrentPosts = filteredPosts.slice(
+    let updatedcurrentProducts = filteredProducts.slice(
       (pageNum + 1 - 1) * 5,
       (pageNum + 1) * 5
     );
-    setPoststoShow(updatedcurrentPosts);
+    setProductstoShow(updatedcurrentProducts);
     setPageNum((prev) => prev + 1);
   };
   const decrementHandler = () => {
     if (pageNum == 1) return;
-    let updatedcurrentPosts = filteredPosts.slice(
+    let updatedcurrentProducts = filteredProducts.slice(
       (pageNum - 1 - 1) * 5,
       (pageNum - 1) * 5
     );
-    setPoststoShow(updatedcurrentPosts);
+    setProductstoShow(updatedcurrentProducts);
     setPageNum((prev) => prev - 1);
   };
   return (
     <div>
       <ProductContainer>
         <ControllerContainer>
-          {poststoShow == undefined || poststoShow.length == 0 ? null : (
+          {productstoShow == undefined || productstoShow.length == 0 ? null : (
             <Pagination>
               <Button
                 style={{borderRadius:"5px"}}
-                disabled={poststoShow == undefined || poststoShow.length == 0}
+                disabled={productstoShow == undefined || productstoShow.length == 0}
                 onClick={decrementHandler}
               >
                 <FontAwesomeIcon icon={faCircleMinus} />
@@ -92,7 +92,7 @@ function Posts() {
               {" " + "Page: " + pageNum + " "}
               <Button
                 style={{borderRadius:"5px"}}
-                disabled={poststoShow == undefined || poststoShow.length == 0}
+                disabled={productstoShow == undefined || productstoShow.length == 0}
                 onClick={incrementHandler}
               >
                 <FontAwesomeIcon icon={faPlusCircle} />
@@ -102,8 +102,8 @@ function Posts() {
         </ControllerContainer>
         {showLoading()}
         <Product>
-          {poststoShow?.map((item) => {
-            return <PostItem key={item.id} item={item} />;
+          {productstoShow?.map((item) => {
+            return <ProductItem key={item.id} item={item} />;
           })}
         </Product>
       </ProductContainer>
@@ -111,4 +111,4 @@ function Posts() {
   );
 }
 
-export default Posts;
+export default Products;

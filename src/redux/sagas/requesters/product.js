@@ -1,12 +1,12 @@
 import axios from "axios";
-// export const requestGetPost = (startCount) => {
+// export const requestGetProduct = (startCount) => {
 //     if (startCount === 0) startCount=10;
 //     return axios.request({
 //         method:'get',
 //         url:`https://fakestoreapi.com/products?limit=${startCount}`
 //     })
 // } 
-export const requestGetPost = () => {
+export const requestGetProduct = () => {
     return axios.request({
         method:'get',
         url:`https://fakestoreapi.com/products`

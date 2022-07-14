@@ -1,25 +1,25 @@
 import { createSlice } from "@reduxjs/toolkit";
 
-const postSlice = createSlice({
-  name: "post",
+const productSlice = createSlice({
+  name: "product",
   initialState: {
-    posts: [],
-    filteredPosts: [],
+    products: [],
+    filteredProducts: [],
     loading: false,
     category: "All",
     sortBy: "None",
   },
   reducers: {
-    setLoadingPost(state) {
+    setLoadingProduct(state) {
       return { ...state, loading: true };
     },
-    getPost() {},
-    setPost(state, action) {
-      const { posts } = action.payload;
+    getProduct() {},
+    setProduct(state, action) {
+      const { products } = action.payload;
       return {
         ...state,
-        posts,
-        filteredPosts: posts,
+        products,
+        filteredProducts: products,
         loading: false,
       };
     },
@@ -28,51 +28,50 @@ const postSlice = createSlice({
       if (category == "All") {
         return {
           ...state,
-          filteredPosts: state.posts,
+          filteredProducts: state.products,
           category: category,
           sortBy: "None",
         };
       }
-      const filteredPosts = state.posts.filter(
-        (post) => post.category === category
+      const filteredProducts = state.products.filter(
+        (product) => product.category === category
       );
       return {
         ...state,
-        filteredPosts: filteredPosts,
+        filteredProducts: filteredProducts,
         category: category,
         sortBy: "None",
       };
     },
     getSortBy(state, action) {
       const sortByOption = action.payload;
-      let postsArr = [...state.filteredPosts];
+      let productsArr = [...state.filteredProducts];
       if (sortByOption == "Price - high to low") {
-        postsArr.sort(({ price: a }, { price: b }) => b - a);
+        productsArr.sort(({ price: a }, { price: b }) => b - a);
       } else if (sortByOption == "Price - low to high") {
-        postsArr.sort(({ price: a }, { price: b }) => a - b);
+        productsArr.sort(({ price: a }, { price: b }) => a - b);
       } else if (sortByOption == "Customer Rating") {
-        postsArr.sort(({ rating: a }, { rating: b }) => b.rate - a.rate);
+        productsArr.sort(({ rating: a }, { rating: b }) => b.rate - a.rate);
       } else if (sortByOption == "None") {
         if(state.category == "All"){
-            return { ...state, filteredPosts: state.posts, sortBy: sortByOption };
+            return { ...state, filteredProducts: state.products, sortBy: sortByOption };
         } else {
-            const  tempPosts = state.posts.filter(item => item.category == state.category);
-            return { ...state, filteredPosts: tempPosts, sortBy: sortByOption };
+            const  tempProducts = state.products.filter(item => item.category == state.category);
+            return { ...state, filteredProducts: tempProducts, sortBy: sortByOption };
         }  
       }
-      return {...state,filteredPosts:postsArr,sortBy:sortByOption};
+      return {...state,filteredProducts:productsArr,sortBy:sortByOption};
     },
   },
 });
 export const {
-  getPost,
-  setPost,
+  getProduct,
+  setProduct,
   filterByCategory,
   getSortBy,
-  clearPost,
-  setLoadingPost,
-} = postSlice.actions;
-export default postSlice.reducer;
+  setLoadingProduct,
+} = productSlice.actions;
+export default productSlice.reducer;
 
 // //example of createAsyncThunk
 

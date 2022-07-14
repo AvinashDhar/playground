@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import styled from "styled-components";
-import { filterByCategory,getSortBy } from "../redux/slices/postSlice";
+import { filterByCategory,getSortBy } from "../redux/slices/productSlice";
 import Button from "./Button/Button";
 
 const Wrap = styled.div`
@@ -21,15 +21,15 @@ const SortByOptions = styled.div`
   justify-content: center;
 `;
 
-function ProfileEdit() {
+function ProductFilter() {
   const dispatch = useDispatch();
-  const { posts, category, sortBy } = useSelector((state) => state.post);
+  const { products, category, sortBy } = useSelector((state) => state.product);
   
   const categoryFilterHandler = (category) => {
     dispatch(filterByCategory({ category }));
   };
   const showCategories = () => {
-    let categories = [...new Set(posts.map((item) => item.category))];
+    let categories = [...new Set(products.map((item) => item.category))];
     categories.unshift("All");
     return categories.map((categoryItem) => (
       <Button
@@ -68,13 +68,13 @@ function ProfileEdit() {
   return (
     <>
       <Wrap>
-        {posts === undefined || posts.length === 0 ? null : (
+        {products === undefined || products.length === 0 ? null : (
           <CategoryContainer>
             <h4>Filter By categories:</h4>
             <Categories>{showCategories()}</Categories>
           </CategoryContainer>
         )}
-        {posts === undefined || posts.length === 0 ? null : (<SortContainer>
+        {products === undefined || products.length === 0 ? null : (<SortContainer>
         <h4>sort By:</h4>
             <SortByOptions>{showSortingOptions()}</SortByOptions>
         </SortContainer>)}
@@ -83,4 +83,4 @@ function ProfileEdit() {
   );
 }
 
-export default ProfileEdit;
+export default ProductFilter;
