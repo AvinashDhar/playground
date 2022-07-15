@@ -52,7 +52,7 @@ function Products() {
     return (
       loading && (
         <CircularProgress
-          style={{ color: "#1c5dd5", fontSize: 12 }}
+          style={{ color: "#1c5dd5", fontSize: "50px", marginTop: "25%" }}
           color="secondary"
         />
       )
